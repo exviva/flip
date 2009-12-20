@@ -1,0 +1,4 @@
+<?php
+function db_config() {
+    return array('user' => 'user', 'password' => 'password');
+}
