@@ -198,7 +198,7 @@
 
 	echo "</a>]<hr></td></tr>\n";
 
-	if ($_GET['show_history']==1) {
+	if (isset($_GET['show_history']) && $_GET['show_history']==1) {
 		echo '<tr><td>';
 		display_contact_history(); //defined in this file at the end
 		echo "</td></tr>\n";

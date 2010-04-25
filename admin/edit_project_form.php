@@ -107,7 +107,7 @@
 	echo "</td></tr>\n";
 	echo '<tr><td class="naglowek_maly">Dodaj nowe organizacje:</td></tr>'."\n";
 	echo '<tr><td><textarea name="added_orgs" cols="60" rows="20">';
-	echo htmlspecialchars(stripslashes($_POST['added_orgs']));
+	echo isset($_POST['added_orgs']) ? htmlspecialchars(stripslashes($_POST['added_orgs'])) : '';
 	echo "</textarea></td></tr>\n";
 	echo '<tr><td><input type="submit" value="Zmieñ"></td></tr>'."\n";
 	echo '</form>';
