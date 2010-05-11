@@ -188,6 +188,42 @@ function get_active_users() {
 	return $users;
 }
 
+// get_existing_users($users) returns an array of user_id => login
+// of users whose logins exist in the $users array
+function get_existing_users($users) {
+	if (empty($users)) {
+		return array();
+	}
+
+	db_connect();
+
+	$users_condition = array();
+
+	foreach ($users as $user) {
+		$users_condition[] = "'$user'";
+	}
+
+	$q = 'select user_id, login from users where login in ('.join(', ', $users_condition).')';
+	$r = mysql_query($q);
+	$result = array();
+	$num_users = mysql_num_rows($r);
+
+	for ($i=0; $i<$num_users; ++$i) {
+		$row = mysql_fetch_array($r);
+		$result[$row['user_id']] = $row['login'];
+	}
+
+	return $result;
+}
+
+// get_new_users($users) returns an array of user_id's
+// of users whose logins do not exist in the $users array
+function get_new_users($users) {
+	$existing_users = get_existing_users($users);
+
+	return array_diff($users, $existing_users);
+}
+
 // is_oc_member() checks, whether or not person with user_id $user_id
 // is member of OC of project with project_id $project_id.
 function is_oc_member($user_id, $project_id) {
@@ -280,7 +316,6 @@ return $oc;
 
 function insert_project($name, $ocp_id) {
 	$q = "insert into projects (name, ocp_id, status) values ('".$name."', ".$ocp_id.', 1)';
-	echo $q;
 	db_connect();
 	$r = mysql_query($q);
 
@@ -661,6 +696,23 @@ function get_normal_users() {
 	}
 
 	return $users;
+}
+
+function insert_users($logins) {
+	$inserted_users = array();
+
+	foreach ($logins as $login) {
+		$inserted_users[] = "('$login', 1, old_password('" . DEFAULT_PASSWORD . "'))";
+	}
+	$q = "insert into users (login, status, password) values " . join(', ', $inserted_users);
+	db_connect();
+	$r = mysql_query($q);
+
+	if ($r === false) {
+		return false;
+	}
+
+	return true;
 }
 
 function add_admins($admins) {

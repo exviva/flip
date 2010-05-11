@@ -533,6 +533,104 @@ function display_link_to_search_org($org_id) {
 <?php
 }
 
+function display_add_users_form($values)
+{
+?>
+<table width="90%">
+<tr>
+	<td class="naglowek" align="center">Dodaj u¿ytkowników<hr></td>
+</tr>
+<form action="<?=get_www_root()?>admin/add_users.php" method="POST">
+<tr>
+	<td><table><tr>
+		<td align="right" valign="top">Wymieñ loginy nowych u¿ytkowników:<br>
+		<small>(w formacie imie.nazwisko, bez polskich znaków)</small></td>
+		<td align="left" valign="top"><textarea name="users" cols="30" rows="20"><?
+		echo stripslashes($values['users'])
+		?></textarea></td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td align="center"><input type="submit" value="Dalej"></td>
+</tr>
+</form>
+</table>
+<?php
+}
+
+function display_add_users_conf_form($new_users) {
+//$users is an array with seperate different users' names at each index- with addslashes (by magic_quotes)
+?>
+<table width="90%">
+<tr>
+	<td align="center" class="naglowek">Zaraz dodasz u¿ytkowników<hr></td>
+</tr>
+<tr>
+	<td>
+	<table>
+<?php
+	if (!empty($new_users)) {
+?>
+	<tr>
+		<td align="right" valign="top"><b>Istniej±cy u¿ytkownicy (zostan± zignorowani):</b></td>
+		<td align="left">
+<?php
+		$existing_users = get_existing_users($new_users);
+
+		if ($existing_users === false) {
+			echo 'B³±d bazy danych, spróbuj pó¼niej.';
+		} else if (empty($existing_users)) {
+	        echo '-';
+        } else {
+			foreach(array_keys($existing_users) as $user_id) {
+				display_link_to_user($user_id);
+				echo "<br>\n";
+			}
+		}
+?>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top"><b>Nowi u¿ytkownicy:</b></td>
+		<td align="left">
+<?php
+		$new_users = get_new_users($new_users);
+
+		if (empty($new_users)) {
+			echo '-';
+		} else {
+			foreach($new_users as $user) {
+				echo $user."<br>\n";
+			}
+		}
+?>
+        </td>
+	</tr>
+<?php
+	}
+?>
+	<tr>
+		<td align="right"><form action="add_users_form.php" method="post">
+		<input type="hidden" name="users" value="<?=htmlspecialchars(join("\n", $new_users))?>">
+		<input type="submit" value="Wstecz"></form>
+		</td>
+		<td align="left">
+		<form action="add_users.php" method="post">
+		<input type="hidden" name="confirmed" value="yes">
+		<input type="hidden" name="users" value="<?=htmlspecialchars(join("\n", $new_users))?>">
+		<input type="submit" value="Zatwierd¼">
+		</form>
+		</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+<?php
+}
+
 function parse_phone_number($number) {
 	if (12 === strlen($number)) {
 		if (substr($number, 3, 2) == '42') {
