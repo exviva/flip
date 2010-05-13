@@ -1,4 +1,7 @@
 <?php
 function db_config() {
-    return array('user' => 'user', 'password' => 'password');
+    return array('host' => 'localhost',
+        'db' => 'flip',
+        'user' => 'user',
+        'password' => 'password');
 }

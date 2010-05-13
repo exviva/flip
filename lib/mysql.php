@@ -6,13 +6,13 @@
 // if something went wrong, or the connection handler (not used anyway) otherwise.
 function db_connect() {
         $config = db_config();
-        $result = mysql_pconnect('localhost', $config['user'], $config['password']);
+        $result = mysql_pconnect($config['host'], $config['user'], $config['password']);
         
 	if (!$result) {
         return false;
 	}
                 
-	if (!mysql_select_db('flip')) {
+	if (!mysql_select_db($config['db'])) {
         return false;
 	}
                 
