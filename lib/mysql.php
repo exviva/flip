@@ -447,7 +447,7 @@ function update_org($array) {
 	$q .= 'where organisation_id='.$array['org_id'];
 
 	$r = mysql_query($q);
-	return mysql_affected_rows();
+	return mysql_affected_rows() != -1;
 }
 
 function get_aims() {
