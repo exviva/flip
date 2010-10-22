@@ -11,6 +11,10 @@
 		$_GET['show_closed'] = 0;
 	}
 
+	if (!isset($_GET['show_history'])) {
+		$_GET['show_history'] = 0;
+	}
+
 	echo '<table width="90%" valign="top">'."\n".
 		 '<tr><td align="center" class="naglowek">Moje projekty<hr></td></tr>'."\n";
 	
@@ -31,6 +35,10 @@
 			}
 
 			$orgs = get_my_project_orgs($_SESSION['valid_user_id'], $project_id);
+
+			if ($orgs === false) {
+				$orgs = array();
+			}
 
 			$filter_orgs = array();
 
