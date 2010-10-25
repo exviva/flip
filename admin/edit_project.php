@@ -68,6 +68,9 @@
 			echo "</td></tr>\n";
 		}
 
+		$new_orgs = array();
+		$project_new_orgs = array();
+
 		if (!empty($_POST['added_orgs'])) {
 			$orgs = str_replace("\r", '', $_POST['added_orgs']);
 			$orgs = explode("\n", $orgs);
@@ -129,7 +132,7 @@
 			}
 
 			echo "</td></tr>\n";
-		}	
+		}
 		
 		echo '<tr><td align="right">';
 		echo '<form action="edit_project_form.php" method="post">'."\n";
